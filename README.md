@@ -44,23 +44,6 @@ A full-stack web application built with **Flask** that allows students to submit
 
 ---
 
-## 📂 Project Structure
-student-feedback-portal/
-├── app.py
-├── database.db           
-├── requirements.txt
-├── static/
-│   ├── css/
-│   │   └── styles.css
-├── templates/
-│   ├── base.html
-│   ├── login.html
-│   ├── register.html
-│   ├── index.html
-│   ├── feedback_form.html
-│   ├── admin_dashboard.html
-│   └── view_feedback.html
-└── README.md
 
 
 
