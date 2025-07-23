@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h2>Thank you for your feedback!</h2>
+    <p>We appreciate your input and will use it to improve.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-outline-primary mt-3">Submit Another</a>
+</div>
+{% endblock %}

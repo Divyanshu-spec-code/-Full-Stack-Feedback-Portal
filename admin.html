@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<!-- Success Metrics Section -->
+<div class="card mt-4">
+  <div class="card-body">
+    <h5 class="card-title">📊 Success Metrics</h5>
+    <div class="row text-center">
+      <div class="col-md-4 mb-3">
+        <div class="p-3 bg-success text-white rounded">
+          <h4>{{ feedbacks|length }}</h4>
+          <p>Total Feedbacks</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="p-3 bg-primary text-white rounded">
+          <h4>
+            {{
+              feedbacks
+              | map(attribute=4)
+              | map('slice', 0, 10)
+              | unique
+              | list
+              | length
+            }}
+          </h4>
+          <p>Days with Feedback</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="p-3 bg-warning text-dark rounded">
+          <h4>
+            {{
+              (feedbacks | length // (
+                feedbacks
+                | map(attribute=4)
+                | map('slice', 0, 10)
+                | unique
+                | list
+                | length
+              )) if feedbacks|length > 0 else 0
+            }}
+          </h4>
+          <p>Avg. Feedbacks / Day</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Chart -->
+<h3 class="mt-5 mb-4">Feedback Analytics</h3>
+<canvas id="feedbackChart" width="400" height="150"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  fetch('/feedback-data')
+    .then(response => response.json())
+    .then(data => {
+      const ctx = document.getElementById('feedbackChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: 'Feedback Count',
+            data: data.counts,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
+      });
+    });
+</script>
+
+<!-- Feedback Table -->
+<!-- Feedback Table -->
+<div class="card mt-4">
+  <div class="card-body">
+    <h5 class="card-title">Recent Feedbacks</h5>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Sentiment</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for fb in feedbacks %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ fb[1] }}</td> <!-- name -->
+            <td>{{ fb[2] }}</td> <!-- email -->
+            <td>{{ fb[3] }}</td> <!-- message -->
+            <td>
+              {% if fb[4] == 'positive' %}
+                <span class="badge bg-success">{{ fb[4] }}</span>
+              {% elif fb[4] == 'negative' %}
+                <span class="badge bg-danger">{{ fb[4] }}</span>
+              {% else %}
+                <span class="badge bg-secondary">{{ fb[4] }}</span>
+              {% endif %}
+            </td>
+            <td>{{ fb[5] }}</td> <!-- timestamp -->
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

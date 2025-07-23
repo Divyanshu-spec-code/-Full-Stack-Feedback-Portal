@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Feedback{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <h2 class="mb-4 text-center">Submit Your Feedback</h2>
+    <form method="POST" action="/">
+      <div class="mb-3">
+        <label for="name" class="form-label">Your Name</label>
+        <input type="text" class="form-control" name="name" id="name" placeholder="John Doe" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Your Email</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="john@example.com" required>
+      </div>
+      <div class="mb-3">
+        <label for="message" class="form-label">Your Feedback</label>
+        <textarea class="form-control" name="message" id="message" rows="4" placeholder="Type your feedback..." required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
